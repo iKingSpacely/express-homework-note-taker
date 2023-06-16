@@ -1,12 +1,16 @@
 const api = require('express').Router()
-const { readFromFile, writeToFile, readAndAppend } = require('../helpers/fsUtils')
+const methods = require('../helpers/methods')
 
 
 
 api.get('/notes', (req, res) => {
     console.info(`${req.method} request received for notes`);
 
-    readFromFile('./Develop/db/db.json').then((data) => res.json(JSON.parse(data)));
+    methods.getNotes().then(
+        data => {
+            return res.json(data)
+        }
+    )
 });
 
 api.post('/notes', (req, res) => {
@@ -14,28 +18,27 @@ api.post('/notes', (req, res) => {
     console.info(`${req.method} request received to submit notes`);
 
     // Destructuring assignment for the items in req.body
-    const { email, feedbackType, feedback } = req.body;
+    const { title, text } = req.body;
 
     // If all the required properties are present
-    if (email && feedbackType && feedback) {
+    if (title && text ) {
         // Variable for the object we will save
-        const newFeedback = {
-            email,
-            feedbackType,
-            feedback,
-            feedback_id: uuid(),
+        const newNote = {
+            title,
+            text,
+            is: uuid(),
         };
 
-        readAndAppend(newFeedback, './db/db.json');
+        readAndAppend(newNote, './db/db.json');
 
         const response = {
             status: 'success',
-            body: newFeedback,
+            body: newNote,
         };
 
         res.json(response);
     } else {
-        res.json('Error in posting feedback');
+        res.json('Error in posting your note');
     }
 });
 
