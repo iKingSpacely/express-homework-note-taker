@@ -1,13 +1,16 @@
+const path = require('path');
+const notes = require('express').Router();
 
 
-
-
-app.get('/', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/js/index.html'))
+notes.get('/home', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/index.html'))
 );
 
 
 
-app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/notes.html'));
+notes.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/notes.html'));
   });
+
+//this allows us to access this file when we use it on other files like server.js
+module.exports = notes;
