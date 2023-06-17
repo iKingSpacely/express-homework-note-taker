@@ -8,7 +8,7 @@ const writeFile = util.promisify(fs.writeFile);
 
 class Methods { //making this class asynchronous by using async function. when it gets to await, it's going to pause and execute the readFile function, which will read the data from the db.json file and parse it into the array
     async read() {
-        const data = await readFile('.db/db.json', 'utf8');
+        const data = await readFile('./db/db.json', 'utf8');
         return JSON.parse(data) || [];
     }
     //this will write the data from the user inputs into the db.json and then pause until that's done (because fo the await function)
@@ -33,7 +33,7 @@ class Methods { //making this class asynchronous by using async function. when i
         const postedNote = { title, text, id: uuidv4()};
         const notes = await this.getNotes();
         notes.push(postedNote);
-        await this.writeFile(notes);
+        await this.write(notes);
         return postedNote;
     }
 
