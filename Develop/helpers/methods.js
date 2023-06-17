@@ -40,6 +40,7 @@ class Methods { //making this class asynchronous by using async function. when i
     //learned about this in class today, we essentially create another function that will work similarly to the above function, except it will delete the note based on the id it's been assigned to. 
     async deleteNote(id) {
         const notes = await this.getNotes();
+        //the .filter function combs through all of the notes and will find the id correlated to the note that we want to delete. not possible to do this without the uuidv4 package or uuid file created from scratch
         const updatedNotes = notes.filter(note => note.id !== id);
         await this.write(updatedNotes);
     }
