@@ -28,36 +28,20 @@ class Methods { //making this class asynchronous by using async function. when i
         if (!title || !text ) {
             throw new Error('Please enter a title and text for the note!')
         }
-    }
-}
 
-
-
-class Methods {
-    read() {
-        return readFile('./Develop/db/db.json', 'utf8');
+        //the id: uuidv4 is using the npm package to asign a unique id numnber to each post so that we can grab it in the below function and delete if we want to
+        const postedNote = { title, text, id: uuidv4()};
+        const notes = await this.getNotes();
+        notes.push(postedNote);
+        await this.writeFile(notes);
+        return postedNote;
     }
-    write(data) {
-        return writeFile('./Develop/db/db.json', JSON.stringify(data))
-    }
-    //getNotes method is going run the read method, then (async) iterate through each individul note 
-    getNotes() {
-        return this.read().then(
-            //insde the then method are the assigned to the new temporary variable tempNotes
-            data => {
-                let tempNotes;
-                // If notes isn't an array or can't be turned into one, send back a new empty array
-                try {
-                //the tempNotes is going to push all of data into an array that can be read in JSON
-                    tempNotes = [].concat(JSON.parse(data))
-                } 
-                catch (error) {
-                    tempNotes = []
-                }
-                //the final product of getNotes is going to be an array of notes
-               return tempNotes;
-            }
-        )
+
+    //learned about this in class today, we essentially create another function that will work similarly to the above function, except it will delete the note based on the id it's been assigned to. 
+    async deleteNote(id) {
+        const notes = await this.getNotes();
+        const updatedNotes = notes.filter(note => note.id !== id);
+        await this.write(updatedNotes);
     }
 }
 
