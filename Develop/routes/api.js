@@ -17,30 +17,15 @@ api.post('/notes', (req, res) => {
     // Log that a POST request was received
     console.info(`${req.method} request received to submit notes`);
 
-    // Destructuring assignment for the items in req.body
-    const { title, text } = req.body;
-
-    // If all the required properties are present
-    if (title && text ) {
-        // Variable for the object we will save
-        const newNote = {
-            title,
-            text,
-            is: uuid(),
-        };
-
-        readAndAppend(newNote, './db/db.json');
-
-        const response = {
-            status: 'success',
-            body: newNote,
-        };
-
-        res.json(response);
-    } else {
-        res.json('Error in posting your note');
-    }
+    methods.postNote(req.body)
+    .then((note) => res.json(note))
 });
 
+api.delete('/notes/:id', (req, res) => {
+    console.info(`${req.method} request received to delete notes`);
+
+    methods.deleteNote(req.params.id)
+    .then(() => res.json({ok: true}))
+});
 
 module.exports = api;

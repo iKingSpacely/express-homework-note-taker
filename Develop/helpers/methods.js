@@ -1,10 +1,18 @@
 const util = require('util');
 const fs = require('fs');
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const readFile = util.promisify(fs.readFile);
 
 const writeFile = util.promisify(fs.writeFile);
+
+class Methods {
+    async read() {
+        const data = await readFile('.db/db.json', 'utf8');
+        return JSON.parse(data) || [];
+    }
+}
+
 
 class Methods {
     read() {
